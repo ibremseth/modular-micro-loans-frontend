@@ -7,13 +7,14 @@ import {
 } from "@mui/material";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
 import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
+import ERC20 from "src/abis/ERC20.json";
 import { useRouter } from "next/router";
 import moment from "moment";
 import { ethers } from "ethers";
-import { PRE_COMMIT_MANAGER_ADDRESS } from "src/constants";
+import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY } from "src/constants";
 
 const CommitPage = () => {
   const router = useRouter();
@@ -23,6 +24,21 @@ const CommitPage = () => {
   const [deadline, setDeadline] = useState(moment());
 
   const { isConnected } = useAccount();
+
+  const { config: allowanceConfig } = usePrepareContractWrite({
+    addressOrName: USDC_DUMMY,
+    contractInterface: ERC20,
+    functionName: "approve",
+    args: [
+      PRE_COMMIT_MANAGER_ADDRESS,
+      amount ? ethers.utils.parseUnits(amount, 18) : 0,
+    ],
+  });
+  const {
+    isLoading: allowanceIsLoading,
+    isSuccess: allowanceIsSuccess,
+    write: allowanceWrite,
+  } = useContractWrite(allowanceConfig);
 
   const { config } = usePrepareContractWrite({
     addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
@@ -35,6 +51,12 @@ const CommitPage = () => {
     ],
   });
   const { isLoading, isSuccess, write } = useContractWrite(config);
+
+  useEffect(() => {
+    if (allowanceIsSuccess) {
+      write();
+    }
+  }, [allowanceIsSuccess]);
 
   return (
     <div>
@@ -70,9 +92,9 @@ const CommitPage = () => {
           </Grid>
           <Grid item>
             <Button
-              disabled={!isConnected || !amount || !deadline || !write}
+              disabled={!isConnected || !amount || !deadline || !allowanceWrite}
               onClick={() => {
-                write?.();
+                allowanceWrite?.();
               }}
             >
               Submit to contract
@@ -80,7 +102,7 @@ const CommitPage = () => {
           </Grid>
         </Grid>
       )}
-      {isLoading && (
+      {(isLoading || allowanceIsLoading) && (
         <Grid container direction="column" align="center">
           <Grid item>
             <CircularProgress />

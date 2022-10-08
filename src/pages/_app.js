@@ -38,6 +38,7 @@ const connectors = connectorsForWallets([
       wallet.rainbow({ chains }),
       wallet.walletConnect({ chains }),
       rainbowWeb3AuthConnector({ chains }),
+      wallet.coinbase({chains})
     ],
   },
 ]);
@@ -47,7 +48,7 @@ const wagmiClient = createClient({
 });
 
 const client = new ApolloClient({
-  uri: "", // TODO
+  uri: "https://api.thegraph.com/subgraphs/name/nhausman1/modular-microloans",
   cache: new InMemoryCache(),
 });
 

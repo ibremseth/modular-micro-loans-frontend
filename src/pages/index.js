@@ -10,9 +10,11 @@ const DiscoverPage = () => {
 
   return (
     <div>
-      <Button onClick={() => router.push("/create")}>Create your own...</Button>
+      <Button onClick={() => router.push("/create")}>
+        Or create your own...
+      </Button>
       <Grid container spacing={1}>
-        {allProjects.map((project) => {
+        {(allProjects || []).map((project) => {
           return <ProjectCard project={project}></ProjectCard>;
         })}
       </Grid>

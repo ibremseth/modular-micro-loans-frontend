@@ -13,6 +13,7 @@ import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
 import moment from "moment";
 import { ethers } from "ethers";
+import { PRE_COMMIT_MANAGER_ADDRESS } from "src/constants";
 
 const CommitPage = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const CommitPage = () => {
   const { isConnected } = useAccount();
 
   const { config } = usePrepareContractWrite({
-    addressOrName: "0x9eaddf39133b59642a56f03aa3069806e021802f",
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "commit",
     args: [

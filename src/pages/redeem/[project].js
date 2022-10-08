@@ -3,6 +3,7 @@ import { useProjectDetails } from "src/hooks/useProjectDetails";
 import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
 import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
+import { PRE_COMMIT_MANAGER_ADDRESS } from "src/constants";
 
 const RedeemPage = () => {
   const router = useRouter();
@@ -14,7 +15,7 @@ const RedeemPage = () => {
   } = useProjectDetails(project);
 
   const { config } = usePrepareContractWrite({
-    addressOrName: "0x9eaddf39133b59642a56f03aa3069806e021802f",
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "redeem",
     args: [project, commits.map(({ id }) => id)],

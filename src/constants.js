@@ -1,0 +1,4 @@
+export const PRE_COMMIT_MANAGER_ADDRESS =
+  "0x9eaddf39133b59642a56f03aa3069806e021802f";
+
+export const USDC_DUMMY = "0xe6b8a5cf854791412c1f6efc7caf629f5df1c747";

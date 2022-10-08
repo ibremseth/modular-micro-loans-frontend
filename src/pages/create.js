@@ -3,8 +3,7 @@ import { useState } from "react";
 import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
 import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
-
-const usdc = "0xe6b8a5cf854791412c1f6efc7caf629f5df1c747";
+import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY } from "src/constants";
 
 const CreateProject = () => {
   const router = useRouter();
@@ -12,10 +11,10 @@ const CreateProject = () => {
   const { isConnected } = useAccount();
 
   const { config } = usePrepareContractWrite({
-    addressOrName: "0x9eaddf39133b59642a56f03aa3069806e021802f",
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "createProject",
-    args: [usdc],
+    args: [USDC_DUMMY],
   });
   const { isLoading, isSuccess, write } = useContractWrite(config);
 

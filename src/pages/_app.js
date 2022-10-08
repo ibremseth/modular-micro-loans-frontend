@@ -7,11 +7,11 @@ import {
   wallet,
 } from "@rainbow-me/rainbowkit";
 import { chain, createClient, WagmiConfig, configureChains } from "wagmi";
-import { rainbowWeb3AuthConnector } from "../web3auth/RainbowWeb3authConnector";
+import { rainbowWeb3AuthConnector } from "src/web3auth/RainbowWeb3authConnector";
 
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import AquaHeader from "../components/header";
+import AquaHeader from "src/components/header";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";

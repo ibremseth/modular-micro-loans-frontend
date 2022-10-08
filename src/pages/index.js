@@ -1,7 +1,7 @@
 import { Button, Grid } from "@mui/material";
 import { useRouter } from "next/router";
-import ProjectCard from "../components/projectCard";
-import { useAllProjects } from "../hooks/useAllProjects";
+import ProjectCard from "src/components/projectCard";
+import { useAllProjects } from "src/hooks/useAllProjects";
 
 const DiscoverPage = () => {
   const router = useRouter();

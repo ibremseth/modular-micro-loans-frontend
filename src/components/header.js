@@ -1,20 +1,26 @@
+import { AppBar, Grid, Toolbar } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useRouter } from "next/router";
 
 const AquaHeader = () => {
+  const router = useRouter();
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 5,
-        bottom: 5,
-        left: 5,
-        right: 5,
-        display: "flex",
-        justifyContent: "flex-end",
-        fontFamily: "sans-serif",
-      }}
-    >
-      <ConnectButton />
+    <div>
+      <AppBar>
+        <Grid container>
+          <Grid item>
+            <Toolbar onClick={() => router.push("/")}>Home</Toolbar>
+          </Grid>
+          <Grid item xs>
+            <Grid container direction="row-reverse">
+              <ConnectButton />
+            </Grid>
+          </Grid>
+        </Grid>
+      </AppBar>
+      <br />
+      <br />
+      <br />
     </div>
   );
 };

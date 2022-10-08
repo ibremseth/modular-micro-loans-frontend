@@ -13,8 +13,17 @@ import { rainbowWeb3AuthConnector } from "../web3auth/RainbowWeb3authConnector";
 import { publicProvider } from "wagmi/providers/public";
 import AquaHeader from "../components/header";
 
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+  [chain.polygon, chain.polygonMumbai],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider(),
@@ -50,6 +59,7 @@ const Body = ({ Component, pageProps, apollo }) => {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
       </Head>
+      <AquaHeader></AquaHeader>
       <Component {...pageProps} />
     </>
   );
@@ -59,8 +69,10 @@ const App = (props) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <AquaHeader></AquaHeader>
-        <Body {...props} />
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Body {...props} />
+        </ThemeProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

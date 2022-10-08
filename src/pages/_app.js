@@ -1,6 +1,7 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import Head from "next/head";
 
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import {
   connectorsForWallets,
   RainbowKitProvider,
@@ -9,7 +10,6 @@ import {
 import { chain, createClient, WagmiConfig, configureChains } from "wagmi";
 import { rainbowWeb3AuthConnector } from "src/web3auth/RainbowWeb3authConnector";
 
-import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import AquaHeader from "src/components/header";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
@@ -26,7 +26,12 @@ const darkTheme = createTheme({
 const { chains, provider } = configureChains(
   [chain.polygonMumbai],
   [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI }),
+    jsonRpcProvider({
+      rpc: (chain) => {
+        if (chain.id !== 80001) return null
+          return { http: "https://polygon-mumbai-rpc.gateway.pokt.network" }
+        },
+      }),
     publicProvider(),
   ]
 );

@@ -39,7 +39,10 @@ const ProjectCard = ({ project }) => {
   return (
     <Grid item sx={{ maxWidth: "25%", width: "25%" }}>
       <Card raised={true}>
-        <CardContent>
+        <CardContent
+          onClick={() => router.push("/project/" + project.id)}
+          sx={{ cursor: "pointer" }}
+        >
           <p>{"Project: " + projectName}</p>
           <p>{"Project ID: " + project.id}</p>
           <p>{"Commits: " + project.numCommits}</p>

@@ -14,7 +14,7 @@ const AquaHeader = () => {
               sx={{ cursor: "pointer" }}
               style={{ height: "100%" }}
             >
-              Home
+              Agua Sin Gas
             </Toolbar>
           </Grid>
           {/* <Grid item>

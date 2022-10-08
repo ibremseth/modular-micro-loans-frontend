@@ -10,21 +10,23 @@ const RedeemPage = () => {
 
   const { address, isConnected } = useAccount();
   const {
-    projectDetails: { receiver, numCommits, amountCommitted, commitIds },
+    projectDetails: { receiver, numCommits, amountCommitted, commits },
   } = useProjectDetails(project);
 
   const { config } = usePrepareContractWrite({
     addressOrName: "0x9eaddf39133b59642a56f03aa3069806e021802f",
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "redeem",
-    args: [project, commitIds],
+    args: [project, commits.map(({ id }) => id)],
   });
   const { isLoading, isSuccess, write } = useContractWrite(config);
 
   return (
     <div>
       {isConnected &&
-      address.toLowerCase() == (receiver || "").toLowerCase() ? (
+      address &&
+      receiver &&
+      address.toLowerCase() == receiver.toLowerCase() ? (
         <div>
           <br />
           {!isLoading && !isSuccess && (

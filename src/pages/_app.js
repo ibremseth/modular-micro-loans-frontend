@@ -12,6 +12,7 @@ import { rainbowWeb3AuthConnector } from "../web3auth/RainbowWeb3authConnector";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import AquaHeader from "../components/header";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -45,6 +46,11 @@ const wagmiClient = createClient({
   provider,
 });
 
+const client = new ApolloClient({
+  uri: "", // TODO
+  cache: new InMemoryCache(),
+});
+
 const Body = ({ Component, pageProps }) => {
   return (
     <>
@@ -69,10 +75,12 @@ const App = (props) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          <Body {...props} />
-        </ThemeProvider>
+        <ApolloProvider client={client}>
+          <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+            <Body {...props} />
+          </ThemeProvider>
+        </ApolloProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

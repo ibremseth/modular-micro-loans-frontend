@@ -5,11 +5,11 @@ const ProjectCard = ({ project }) => {
     <Grid item sx={3}>
       <Card raised={true}>
         <CardContent>
-          <p>{"Project ID :" + project.id}</p>
-          <p>{"Number Committed :" + project.numCommits}</p>
-          <p>{"Amount Committed :" + project.amountCommitted}</p>
-          <p>{"Number Redeemed :" + project.numRedeemed}</p>
-          <p>{"Amount Redeemed :" + project.amountRedeemed}</p>
+          <p>{"Project ID: " + project.id}</p>
+          <p>{"Number Committed: " + project.numCommits}</p>
+          <p>{"Amount Committed: " + project.amountCommitted}</p>
+          <p>{"Number Redeemed: " + project.numRedeemed}</p>
+          <p>{"Amount Redeemed: " + project.amountRedeemed}</p>
         </CardContent>
         <CardActions>
           <Button size="small" href={"/project/" + project.id}>

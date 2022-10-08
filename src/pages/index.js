@@ -1,7 +1,10 @@
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
+import { useRouter } from "next/router";
 import ProjectCard from "../components/projectCard";
 
 const DiscoverPage = () => {
+  const router = useRouter();
+
   // Get list of projects
   const projects = [
     {
@@ -29,6 +32,7 @@ const DiscoverPage = () => {
 
   return (
     <div>
+      <Button onClick={() => router.push("/create")}>Create your own...</Button>
       <Grid container spacing={1}>
         {projects.map((project) => {
           return <ProjectCard project={project}></ProjectCard>;

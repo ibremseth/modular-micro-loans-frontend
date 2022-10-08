@@ -9,7 +9,7 @@ import {
 import { chain, createClient, WagmiConfig, configureChains } from "wagmi";
 import { rainbowWeb3AuthConnector } from "../web3auth/RainbowWeb3authConnector";
 
-// import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import AquaHeader from "../components/header";
 
@@ -23,11 +23,8 @@ const darkTheme = createTheme({
 });
 
 const { chains, provider } = configureChains(
-  [chain.polygon, chain.polygonMumbai],
-  [
-    // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
-    publicProvider(),
-  ]
+  [chain.polygonMumbai],
+  [alchemyProvider({ apiKey: "" }), publicProvider()]
 );
 const connectors = connectorsForWallets([
   {
@@ -45,7 +42,7 @@ const wagmiClient = createClient({
   provider,
 });
 
-const Body = ({ Component, pageProps, apollo }) => {
+const Body = ({ Component, pageProps }) => {
   return (
     <>
       <Head>

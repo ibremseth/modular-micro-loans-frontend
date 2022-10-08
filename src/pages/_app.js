@@ -24,7 +24,10 @@ const darkTheme = createTheme({
 
 const { chains, provider } = configureChains(
   [chain.polygonMumbai],
-  [alchemyProvider({ apiKey: "" }), publicProvider()]
+  [
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI }),
+    publicProvider(),
+  ]
 );
 const connectors = connectorsForWallets([
   {

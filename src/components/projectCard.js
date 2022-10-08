@@ -2,7 +2,6 @@ import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { Web3Storage } from "web3.storage";
 
 const ProjectCard = ({ project }) => {
   const { address } = useAccount();
@@ -43,6 +42,7 @@ const ProjectCard = ({ project }) => {
         <CardContent>
           <p>{"Project: " + projectName}</p>
           <p>{"Project ID: " + project.id}</p>
+          <p>{"Commits: " + project.numCommits}</p>
         </CardContent>
         <CardActions>
           <Button

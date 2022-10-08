@@ -53,10 +53,10 @@ const CommitPage = () => {
   const { isLoading, isSuccess, write } = useContractWrite(config);
 
   useEffect(() => {
-    if (allowanceIsSuccess) {
+    if (allowanceIsSuccess && write) {
       write();
     }
-  }, [allowanceIsSuccess]);
+  }, [allowanceIsSuccess, write]);
 
   return (
     <div>

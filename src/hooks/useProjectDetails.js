@@ -1,8 +1,9 @@
 import { useQuery, gql } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const GET_PROJECT = gql`
-  query GetProject($id: ID!) {
-    project(id: $id) {
+  query GetProject($projectId: ID!) {
+    project(id: $projectId) {
       id
       receiver
       asset
@@ -11,7 +12,7 @@ const GET_PROJECT = gql`
       numRedeemed
       amountRedeemed
       createdAt
-      commits {
+      commits(where: { status: ACTIVE }) {
         id
       }
     }
@@ -19,23 +20,14 @@ const GET_PROJECT = gql`
 `;
 
 export function useProjectDetails(projectId) {
-  //   const projectDetails = {
-  //     id: projectId,
-  //     receiver: "0xBf33d3f2c623550c48D7063E0Ac233c8De2dB414",
-  //     asset: "",
-  //     numCommits: 10,
-  //     amountCommitted: 100,
-  //     numRedeemed: 0,
-  //     amountRedeemed: 0,
-  //     createdAt: 0,
-  //     commits: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
-  //   };
-  //   return { projectDetails, projectDetailsLoading: false };
+  const router = useRouter();
 
   const { loading, data } = useQuery(GET_PROJECT, {
     variables: {
-      id: projectId,
+      projectId: projectId,
     },
+    skip: !router.isReady,
   });
+
   return { projectDetails: data?.project, projectDetailsLoading: loading };
 }

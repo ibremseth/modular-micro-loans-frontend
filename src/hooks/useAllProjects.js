@@ -47,5 +47,5 @@ export function useAllProjects() {
   //   };
 
   const { loading, data } = useQuery(GET_ALL_PROJECTS);
-  return { allProjects: data?.projects, allProjectsLoading: loading };
+  return { allProjects: data?.projects || [], allProjectsLoading: loading };
 }

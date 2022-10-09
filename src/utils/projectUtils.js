@@ -15,7 +15,7 @@ export const getProjectMetadata = async (projectId, successCallback) => {
         )
           .then((response) => response.json())
           .then((data) => {
-            successCallback(data.projectName);
+            successCallback(data.projectName, data.locationName, data.description);
           });
       }
     });

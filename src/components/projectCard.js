@@ -6,6 +6,7 @@ import {
   Grid,
   CardHeader,
   CardContent,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
@@ -19,14 +20,23 @@ const ProjectCard = ({ project }) => {
   const router = useRouter();
 
   const [projectName, setProjectName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+
+  const setProjectData = (projectName, locationName, description) => {
+    setProjectName(projectName);
+    setLocation(locationName);
+    setDescription(description);
+  }
 
   useEffect(() => {
     try {
-      getProjectMetadata(project.id, setProjectName);
+      getProjectMetadata(project.id, setProjectData);
     } catch (err) {
       console.log(err);
     }
   }, [project]);
+  const locationView = location ? (<p>{"Location: " + location}</p>) : (<></>);
 
   return (
     <Grid item sx={{ maxWidth: "25%", width: "25%" }}>
@@ -37,10 +47,13 @@ const ProjectCard = ({ project }) => {
           onClick={() => router.push("/project/" + project.id)}
           sx={{ cursor: "pointer" }}
         />
-        <CardContent
-          onClick={() => router.push("/project/" + project.id)}
-          sx={{ cursor: "pointer" }}
-        >
+        <CardContent>
+          {description ? (<Typography variant="body1" color="text.secondary">
+            {description}
+          </Typography>) : (<></>)}
+          {location ? (<Typography variant="body1" color="text.secondary">
+            {location}
+          </Typography>) : (<></>)}
           <ENSResolver address_={project.receiver} />
         </CardContent>
         <CardActions>

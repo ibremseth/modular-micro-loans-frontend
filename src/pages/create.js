@@ -1,4 +1,4 @@
-import { CircularProgress, TextField, Button, Grid } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField, Button, Grid } from "@mui/material";
 import { useState } from "react";
 import {
   useAccount,
@@ -8,11 +8,14 @@ import {
 } from "wagmi";
 import PRE_COMMIT_MANAGER_ABI from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
-import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY } from "src/constants";
+import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY, COUNTRY_LIST } from "src/constants";
 
 const CreateProject = () => {
   const router = useRouter();
   const [projectName, setProjectName] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState(null);
+  const [locationInput, setLocationInput] = useState("");
   const { address, isConnected } = useAccount();
 
   const [loading, setLoading] = useState(false);
@@ -31,6 +34,7 @@ const CreateProject = () => {
     eventName: "ProjectCreated",
     listener: (event) => {
       if (event[2].toLowerCase() == address.toLowerCase()) {
+        const locationName = location?.label;
         fetch("https://backend-modular-microloans.herokuapp.com/pinProject", {
           headers: {
             Accept: "application/json",
@@ -39,7 +43,7 @@ const CreateProject = () => {
           method: "POST",
           body: JSON.stringify({
             projectId: event[0].toNumber(),
-            json: { projectName },
+            json: { projectName, locationName, description },
           }),
         }).then(() => {
           setLoading(false);
@@ -58,8 +62,33 @@ const CreateProject = () => {
               id="accepted-asset-id"
               label="Project Name"
               placeholder="Your project here..."
+              sx={{ width: 300, paddingBottom:3}}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
+            />
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={COUNTRY_LIST}
+              sx={{ width: 300, paddingBottom:3}}
+              renderInput={(params) => <TextField {...params} label="Location" />}
+              value={location}
+              onChange={(event, newLocation) => {
+                console.log(newLocation)
+                setLocation(newLocation);
+              }}
+              inputValue={locationInput}
+              onInputChange={(event, newLocationInput) => {
+                setLocationInput(newLocationInput);
+              }}
+            />
+            <TextField
+              id="accepted-asset-id"
+              label="Description"
+              placeholder="Share your idea with the world"
+              value={description}
+              sx={{ width: 300}}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </Grid>
           <Grid item>
@@ -70,7 +99,7 @@ const CreateProject = () => {
                 write?.();
               }}
             >
-              Submit to contract
+              Launch your project 🚀 
             </Button>
           </Grid>
         </Grid>

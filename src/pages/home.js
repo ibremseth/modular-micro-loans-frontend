@@ -144,7 +144,7 @@ const Hero = () => {
             Commit
           </Typography>
           <Typography variant="h6" style={styles.subtitle}>
-          Commit to the projects and people that matter to you most. Commit inverts traditional fundraising by combining the power of founders and their early supporters from day 1.s
+          Commit to the projects and people that matter to you most. Commit inverts traditional fundraising by combining the power of founders and their early supporters from day 1.
           </Typography>
           <Button  onClick={() => router.push("/")} variant="contained" color="primary" sx={{ width: "200px", fontSize: "16px" }}>
             Discover more

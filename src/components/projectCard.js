@@ -2,8 +2,10 @@ import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import ENSResolver from "./ens";
 
 const ProjectCard = ({ project }) => {
+  console.log("in project card, project is", project);
   const { address } = useAccount();
   const router = useRouter();
 
@@ -46,6 +48,7 @@ const ProjectCard = ({ project }) => {
           <p>{"Project: " + projectName}</p>
           <p>{"Project ID: " + project.id}</p>
           <p>{"Commits: " + project.numCommits}</p>
+          <ENSResolver address_={project.receiver} />
         </CardContent>
         <CardActions>
           <Button

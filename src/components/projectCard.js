@@ -1,34 +1,82 @@
-import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
+import {
+  Fab,
+  Button,
+  Card,
+  CardActions,
+  Grid,
+  CardHeader,
+  CardContent,
+  Typography,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import ENSResolver from "src/components/ens";
+import { getProjectMetadata } from "src/utils/projectUtils";
 
 const ProjectCard = ({ project }) => {
   const { address } = useAccount();
   const router = useRouter();
 
+  const [projectName, setProjectName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+
+  const setProjectData = (projectName, locationName, description) => {
+    setProjectName(projectName);
+    setLocation(locationName);
+    setDescription(description);
+  };
+
+  useEffect(() => {
+    try {
+      getProjectMetadata(project.id, setProjectData);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [project]);
+
   return (
-    <Grid item sx={3}>
+    <Grid item sx={{ maxWidth: "33%", width: "33%" }}>
       <Card raised={true}>
-        <CardContent>
-          <p>{"Project ID: " + project.id}</p>
-          <p>{"Number Committed: " + project.numCommits}</p>
-          <p>{"Amount Committed: " + project.amountCommitted}</p>
-          <p>{"Number Redeemed: " + project.numRedeemed}</p>
-          <p>{"Amount Redeemed: " + project.amountRedeemed}</p>
+        <CardHeader
+          title={projectName ? projectName : "Project " + project.id}
+          //   subheader={project.numCommits + " active commits"}
+          subheader={description ? description : ""}
+          onClick={() => router.push("/project/" + project.id)}
+          sx={{ cursor: "pointer" }}
+        />
+        <CardContent
+          onClick={() => router.push("/project/" + project.id)}
+          sx={{ cursor: "pointer" }}
+          style={{ "margin-top": -20 }}
+        >
+          <Typography variant="h6" color="text.secondary">
+            {project.numCommits + " active commits"}
+          </Typography>
+          {location ? (
+            <div>
+              <br />
+              <Typography variant="body2" color="text.secondary">
+                {location}
+              </Typography>
+            </div>
+          ) : (
+            <></>
+          )}
         </CardContent>
         <CardActions>
-          <Button
-            size="small"
-            onClick={() => router.push("/project/" + project.id)}
-          >
-            Commit
-          </Button>
+          <div>
+            <ENSResolver address_={project.receiver} />
+          </div>
           {address &&
             project.receiver &&
             address.toLowerCase() == project.receiver.toLowerCase() && (
               <Button
                 size="small"
                 onClick={() => router.push("/redeem/" + project.id)}
+                style={{ "margin-left": "auto" }}
               >
                 Redeem
               </Button>

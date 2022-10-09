@@ -1,22 +1,32 @@
-import { CircularProgress, TextField, Button, Grid } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField, Button, Grid } from "@mui/material";
 import { useState } from "react";
-import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
-import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
+import {
+  useAccount,
+  usePrepareContractWrite,
+  useContractWrite,
+  useContractEvent,
+} from "wagmi";
+import PRE_COMMIT_MANAGER_ABI from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
-import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY, ACTION_ID } from "src/constants";
+import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY, ACTION_ID, COUNTRY_LIST } from "src/constants";
 import { WorldIDWidget } from "@worldcoin/id";
 // import { defaultAbiCoder as abi } from "@ethersproject/abi";
 
 const CreateProject = () => {
   const router = useRouter();
   const [projectName, setProjectName] = useState("");
-  const { address, isConnected } = useAccount();
   const [worldIDProof, setWorldIDProof] = useState(null);
   // console.log({ worldIDProof });
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState(null);
+  const [locationInput, setLocationInput] = useState("");
+  const { address, isConnected } = useAccount();
+
+  const [loading, setLoading] = useState(false);
 
   const { config, error } = usePrepareContractWrite({
     addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
-    contractInterface: PRE_COMMIT_MANAGER,
+    contractInterface: PRE_COMMIT_MANAGER_ABI,
     functionName: "createProject",
     args: [
       USDC_DUMMY,
@@ -28,20 +38,69 @@ const CreateProject = () => {
     //   gasLimit: 10000000,
     // },
   });
-  const { isLoading, isSuccess, write } = useContractWrite(config);
+  const { isSuccess, write } = useContractWrite(config);
+
+  useContractEvent({
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
+    contractInterface: PRE_COMMIT_MANAGER_ABI,
+    eventName: "ProjectCreated",
+    listener: (event) => {
+      if (event[2].toLowerCase() == address.toLowerCase()) {
+        const locationName = location?.label;
+        fetch("https://backend-modular-microloans.herokuapp.com/pinProject", {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            projectId: event[0].toNumber(),
+            json: { projectName, locationName, description },
+          }),
+        }).then(() => {
+          setLoading(false);
+        });
+      }
+    },
+  });
 
   return (
     <div>
       <br />
-      {!isLoading && !isSuccess && (
+      {!loading && !isSuccess && (
         <Grid container direction="column" spacing={2} align="center">
           <Grid item>
             <TextField
               id="accepted-asset-id"
               label="Project Name"
               placeholder="Your project here..."
+              sx={{ width: 300, paddingBottom:3}}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
+            />
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={COUNTRY_LIST}
+              sx={{ width: 300, paddingBottom:3}}
+              renderInput={(params) => <TextField {...params} label="Location" />}
+              value={location}
+              onChange={(event, newLocation) => {
+                console.log(newLocation)
+                setLocation(newLocation);
+              }}
+              inputValue={locationInput}
+              onInputChange={(event, newLocationInput) => {
+                setLocationInput(newLocationInput);
+              }}
+            />
+            <TextField
+              id="accepted-asset-id"
+              label="Description"
+              placeholder="Share your idea with the world"
+              value={description}
+              sx={{ width: 300}}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </Grid>
           <Grid item>
@@ -60,23 +119,26 @@ const CreateProject = () => {
             <Button
               disabled={!isConnected || !write}
               onClick={() => {
-                // TODO: Save Project metadata to IPFS
+                setLoading(true);
                 write?.();
               }}
             >
-              Submit to contract
+              Launch your project 🚀
             </Button>
           </Grid>
         </Grid>
       )}
-      {isLoading && (
+      {loading && (
         <Grid container direction="column" align="center">
           <Grid item>
             <CircularProgress />
           </Grid>
+          <Grid item>
+            <p>Creating your project...</p>
+          </Grid>
         </Grid>
       )}
-      {isSuccess && (
+      {isSuccess && !loading && (
         <Grid container direction="column" align="center">
           <Grid item>
             <p>Success!!!</p>

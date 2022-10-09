@@ -1,4 +1,4 @@
-import { Card, Grid, CardHeader, CardContent } from "@mui/material";
+import { Typography, Card, Grid, CardHeader, CardContent } from "@mui/material";
 import moment from "moment";
 import { ethers } from "ethers";
 
@@ -17,8 +17,10 @@ const ProjectCard = ({ commit }) => {
           subheader={"Submitted on " + formatDate(commit.createdAt)}
         />
         <CardContent>
-          <h4>${ethers.utils.formatUnits(commit.amount)}</h4>
-          <h5>Expires on {formatDate(commit.expiry)}</h5>
+          <h1>${ethers.utils.formatUnits(commit.amount)}</h1>
+          <Typography variant="body2" color="text.secondary">
+            Expires on {formatDate(commit.expiry)}
+          </Typography>
         </CardContent>
         {/* <CardActions>
             <Fab

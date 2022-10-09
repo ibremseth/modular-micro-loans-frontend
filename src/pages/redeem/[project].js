@@ -71,7 +71,8 @@ const RedeemPage = () => {
                   </Button>
                 </Grid>
               </Grid>
-
+              <br />
+              <br />
               <Grid container spacing={2}>
                 {(projectDetails?.commits || []).map((commit) => {
                   return <CommitCard commit={commit}></CommitCard>;

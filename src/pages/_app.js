@@ -7,7 +7,7 @@ import {
   RainbowKitProvider,
   wallet,
 } from "@rainbow-me/rainbowkit";
-import { chain, createClient, WagmiConfig, configureChains } from "wagmi";
+import { chain, createClient, WagmiConfig, configureChains, chainId } from "wagmi";
 import { rainbowWeb3AuthConnector } from "src/web3auth/RainbowWeb3authConnector";
 
 import { publicProvider } from "wagmi/providers/public";
@@ -23,15 +23,23 @@ const darkTheme = createTheme({
   },
 });
 
+const mumbaiChainId = 80001;
+const goerliChainId = 5;
+
 const { chains, provider } = configureChains(
-  [chain.polygonMumbai],
+  [chain.polygonMumbai, chain.goerli],
   [
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id !== 80001) return null
+        if (chain.id === mumbaiChainId) {
           return { http: "https://polygon-mumbai-rpc.gateway.pokt.network" }
-        },
-      }),
+        } else if (chainId === goerliChainId) {
+          return { http: "https://goerli-rpc.gateway.pokt.network" } 
+        } else {
+          return null
+        }
+      }
+    }),
     publicProvider(),
   ]
 );

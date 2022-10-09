@@ -5,11 +5,13 @@ import {
   CardActions,
   Grid,
   CardHeader,
+  CardContent,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import ENSResolver from "./ens";
 import { getProjectMetadata } from "src/utils/projectUtils";
 
 const ProjectCard = ({ project }) => {
@@ -35,6 +37,12 @@ const ProjectCard = ({ project }) => {
           onClick={() => router.push("/project/" + project.id)}
           sx={{ cursor: "pointer" }}
         />
+        <CardContent>
+          <p>{"Project: " + projectName}</p>
+          <p>{"Project ID: " + project.id}</p>
+          <p>{"Commits: " + project.numCommits}</p>
+          <ENSResolver address_={project.receiver} />
+        </CardContent>
         <CardActions>
           <Fab
             size="small"

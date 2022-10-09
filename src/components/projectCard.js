@@ -1,4 +1,15 @@
-import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
+import {
+  Fab,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  CardHeader,
+  Avatar,
+} from "@mui/material";
+import { red } from "@mui/material/colors";
+import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
@@ -40,22 +51,27 @@ const ProjectCard = ({ project }) => {
   return (
     <Grid item sx={{ maxWidth: "25%", width: "25%" }}>
       <Card raised={true}>
-        <CardContent
+        <CardHeader
+          title={projectName ? projectName : "Project " + project.id}
+          subheader={project.numCommits + " active commits"}
           onClick={() => router.push("/project/" + project.id)}
           sx={{ cursor: "pointer" }}
-        >
+        />
+        <CardContent>
           <p>{"Project: " + projectName}</p>
           <p>{"Project ID: " + project.id}</p>
           <p>{"Commits: " + project.numCommits}</p>
           <ENSResolver address_={project.receiver} />
         </CardContent>
         <CardActions>
-          <Button
+          <Fab
             size="small"
+            color="primary"
+            aria-label="add"
             onClick={() => router.push("/project/" + project.id)}
           >
-            Commit
-          </Button>
+            <AddIcon />
+          </Fab>
           {address &&
             project.receiver &&
             address.toLowerCase() == project.receiver.toLowerCase() && (

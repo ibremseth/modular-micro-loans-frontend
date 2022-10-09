@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import ENSResolver from "./ens";
+import ENSResolver from "src/components/ens";
 import { getProjectMetadata } from "src/utils/projectUtils";
 
 const ProjectCard = ({ project }) => {

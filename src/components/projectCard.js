@@ -29,6 +29,9 @@ const ProjectCard = ({ project }) => {
   };
 
   useEffect(() => {
+    setProjectName("");
+    setLocation("");
+    setDescription("");
     try {
       getProjectMetadata(project.id, chain ? chain.id : 80001, setProjectData);
     } catch (err) {

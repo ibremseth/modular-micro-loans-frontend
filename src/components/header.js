@@ -14,27 +14,9 @@ const AquaHeader = () => {
               sx={{ cursor: "pointer" }}
               style={{ height: "100%" }}
             >
-              Agua Sin Gas
+              Commit
             </Toolbar>
           </Grid>
-          {/* <Grid item>
-            <Toolbar
-              onClick={() => router.push("/")}
-              sx={{ cursor: "pointer" }}
-              style={{ height: "100%" }}
-            >
-              My Projects
-            </Toolbar>
-          </Grid>
-          <Grid item>
-            <Toolbar
-              onClick={() => router.push("/")}
-              sx={{ cursor: "pointer" }}
-              style={{ height: "100%" }}
-            >
-              My Commits
-            </Toolbar>
-          </Grid> */}
           <Grid item xs>
             <Grid container direction="row-reverse" style={{ padding: "2%" }}>
               <ConnectButton />

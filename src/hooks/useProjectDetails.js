@@ -14,6 +14,11 @@ const GET_PROJECT = gql`
       createdAt
       commits(where: { status: ACTIVE }) {
         id
+        committer
+        amount
+        expiry
+        status
+        createdAt
       }
     }
   }

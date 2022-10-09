@@ -13,7 +13,7 @@ const DiscoverPage = () => {
       <Button onClick={() => router.push("/create")}>
         Or create your own...
       </Button>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         {(allProjects || []).map((project) => {
           return <ProjectCard project={project}></ProjectCard>;
         })}

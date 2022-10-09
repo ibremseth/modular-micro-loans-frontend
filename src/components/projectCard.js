@@ -3,17 +3,16 @@ import {
   Button,
   Card,
   CardActions,
-  CardContent,
   Grid,
   CardHeader,
-  Avatar,
+  CardContent,
 } from "@mui/material";
-import { red } from "@mui/material/colors";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import ENSResolver from "./ens";
+import { getProjectMetadata } from "src/utils/projectUtils";
 
 const ProjectCard = ({ project }) => {
   const { address } = useAccount();
@@ -23,26 +22,7 @@ const ProjectCard = ({ project }) => {
 
   useEffect(() => {
     try {
-      fetch(
-        "https://backend-modular-microloans.herokuapp.com/pinProject?projectId=" +
-          project.id
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.data[0]?.cid) {
-            fetch(
-              "https://" +
-                data.data[0]?.cid +
-                ".ipfs.w3s.link/project-" +
-                project.id +
-                ".json"
-            )
-              .then((response) => response.json())
-              .then((data) => {
-                setProjectName(data.projectName);
-              });
-          }
-        });
+      getProjectMetadata(project.id, setProjectName);
     } catch (err) {
       console.log(err);
     }

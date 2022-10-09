@@ -5,7 +5,6 @@ import { useAccount } from "wagmi";
 import ENSResolver from "./ens";
 
 const ProjectCard = ({ project }) => {
-  console.log("in project card, project is", project);
   const { address } = useAccount();
   const router = useRouter();
 

@@ -1,3 +1,6 @@
+import {
+  Chip,
+} from "@mui/material";
 import { useEnsName} from "wagmi";
 
 const ENSResolver = ({ address_ }) => {
@@ -8,9 +11,11 @@ const ENSResolver = ({ address_ }) => {
     });
 
     if (!data || isLoading || isError) {
-        return (<p>Creator: {shortenedAddress}</p>);
+        let chipLabel = "Creator: " + shortenedAddress;
+        return (<Chip label={chipLabel} variant="outlined" href=""></Chip>);
     }
-    return <p>Creator: {data}</p>
+    let chipLabel = "Creator: " + data;
+    return (<Chip label={chipLabel} variant="outlined"></Chip>);
 }
 
 export default ENSResolver

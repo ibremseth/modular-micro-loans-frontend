@@ -22,11 +22,6 @@ export const BACKEND_LINKS = Object.freeze({
     theGraph:
       "https://api.thegraph.com/subgraphs/name/nhausman1/goerli-modular-microloans",
   },
-  // Optimism
-  //   5: {
-  //     theGraph:
-  //       "https://api.thegraph.com/subgraphs/name/nhausman1/goerli-modular-microloans",
-  //   },
 });
 
 export const COUNTRY_LIST = [

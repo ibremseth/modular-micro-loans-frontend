@@ -5,11 +5,15 @@ import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
 import { PRE_COMMIT_MANAGER_ADDRESS } from "src/constants";
 import { ethers } from "ethers";
+import CommitCard from "src/components/commitCard";
+import { getProjectMetadata } from "src/utils/projectUtils";
+import { useEffect, useState } from "react";
 
 const RedeemPage = () => {
   const router = useRouter();
   const { project } = router.query;
 
+  const [productName, setProductName] = useState();
   const { address, isConnected } = useAccount();
   const { projectDetails } = useProjectDetails(project);
 
@@ -21,6 +25,10 @@ const RedeemPage = () => {
   });
   const { isLoading, isSuccess, write } = useContractWrite(config);
 
+  useEffect(() => {
+    getProjectMetadata(projectDetails?.id, setProductName);
+  }, [projectDetails]);
+
   return (
     <div>
       {isConnected &&
@@ -30,32 +38,46 @@ const RedeemPage = () => {
         <div>
           <br />
           {!isLoading && !isSuccess && (
-            <Grid container direction="column" spacing={2} align="center">
-              <Grid item>
-                <p>Project Info</p>
-                <p>Total Number of commits : {projectDetails?.numCommits}</p>
-                <p>
-                  Total Amount :{" "}
-                  {projectDetails?.amountCommitted
-                    ? ethers.utils.formatUnits(projectDetails?.amountCommitted)
-                    : 0}
-                </p>
+            <div>
+              <Grid container direction="column" spacing={2} align="center">
+                <Grid item>
+                  <h4>
+                    {productName
+                      ? productName
+                      : "Product " + projectDetails?.id}
+                  </h4>
+                  <p>Total Number of commits : {projectDetails?.numCommits}</p>
+                  <p>
+                    Total Amount :{" "}
+                    {projectDetails?.amountCommitted
+                      ? ethers.utils.formatUnits(
+                          projectDetails?.amountCommitted
+                        )
+                      : 0}
+                  </p>
+                </Grid>
+                <Grid item>
+                  <Button
+                    disabled={
+                      !isConnected ||
+                      projectDetails?.commits?.length == 0 ||
+                      !write
+                    }
+                    onClick={() => {
+                      write?.();
+                    }}
+                  >
+                    Redeem all active commits
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Button
-                  disabled={
-                    !isConnected ||
-                    projectDetails?.commits?.length == 0 ||
-                    !write
-                  }
-                  onClick={() => {
-                    write?.();
-                  }}
-                >
-                  Redeem commits
-                </Button>
+
+              <Grid container spacing={2}>
+                {(projectDetails?.commits || []).map((commit) => {
+                  return <CommitCard commit={commit}></CommitCard>;
+                })}
               </Grid>
-            </Grid>
+            </div>
           )}
           {isLoading && (
             <Grid container direction="column" align="center">

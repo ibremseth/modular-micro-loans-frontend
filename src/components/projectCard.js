@@ -37,10 +37,10 @@ const ProjectCard = ({ project }) => {
           onClick={() => router.push("/project/" + project.id)}
           sx={{ cursor: "pointer" }}
         />
-        <CardContent>
-          <p>{"Project: " + projectName}</p>
-          <p>{"Project ID: " + project.id}</p>
-          <p>{"Commits: " + project.numCommits}</p>
+        <CardContent
+          onClick={() => router.push("/project/" + project.id)}
+          sx={{ cursor: "pointer" }}
+        >
           <ENSResolver address_={project.receiver} />
         </CardContent>
         <CardActions>

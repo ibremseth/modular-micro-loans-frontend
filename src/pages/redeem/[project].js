@@ -24,7 +24,7 @@ const RedeemPage = () => {
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 80001],
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "redeem",
     args: [project, (projectDetails?.commits || []).map(({ id }) => id)],
@@ -32,7 +32,11 @@ const RedeemPage = () => {
   const { isLoading, isSuccess, write } = useContractWrite(config);
 
   useEffect(() => {
-    getProjectMetadata(projectDetails?.id, setProductName);
+    getProjectMetadata(
+      projectDetails?.id,
+      chain ? chain.id : 80001,
+      setProductName
+    );
   }, [projectDetails]);
 
   return (

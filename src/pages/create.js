@@ -35,12 +35,12 @@ const CreateProject = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const { config, error } = usePrepareContractWrite({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
+  const { config } = usePrepareContractWrite({
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 80001],
     contractInterface: PRE_COMMIT_MANAGER_ABI,
     functionName: "createProject",
     args: [
-      USDC_DUMMY[chain ? chain.id : 5001],
+      USDC_DUMMY[chain ? chain.id : 80001],
       // worldIDProof?.merkle_root,
       // worldIDProof?.nullifier_hash,
       // !!worldIDProof ? abi.decode(["uint256[8]"], worldIDProof?.proof)[0] : [],
@@ -52,7 +52,7 @@ const CreateProject = () => {
   const { isSuccess, write } = useContractWrite(config);
 
   useContractEvent({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 80001],
     contractInterface: PRE_COMMIT_MANAGER_ABI,
     eventName: "ProjectCreated",
     listener: (event) => {
@@ -65,7 +65,7 @@ const CreateProject = () => {
           },
           method: "POST",
           body: JSON.stringify({
-            projectId: event[0].toNumber(),
+            projectId: parseInt(chain.id + "00" + event[0].toNumber()),
             json: { projectName, locationName, description },
           }),
         }).then(() => {
@@ -99,7 +99,6 @@ const CreateProject = () => {
               )}
               value={location}
               onChange={(event, newLocation) => {
-                console.log(newLocation);
                 setLocation(newLocation);
               }}
               inputValue={locationInput}

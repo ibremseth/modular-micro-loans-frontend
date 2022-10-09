@@ -1,5 +1,4 @@
 import {
-  Fab,
   Button,
   Card,
   CardActions,
@@ -8,16 +7,16 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import ENSResolver from "src/components/ens";
 import { getProjectMetadata } from "src/utils/projectUtils";
 
 const ProjectCard = ({ project }) => {
   const { address } = useAccount();
   const router = useRouter();
+  const { chain } = useNetwork();
 
   const [projectName, setProjectName] = useState("");
   const [location, setLocation] = useState("");
@@ -31,7 +30,7 @@ const ProjectCard = ({ project }) => {
 
   useEffect(() => {
     try {
-      getProjectMetadata(project.id, setProjectData);
+      getProjectMetadata(project.id, chain ? chain.id : 80001, setProjectData);
     } catch (err) {
       console.log(err);
     }
@@ -42,7 +41,6 @@ const ProjectCard = ({ project }) => {
       <Card raised={true}>
         <CardHeader
           title={projectName ? projectName : "Project " + project.id}
-          //   subheader={project.numCommits + " active commits"}
           subheader={description ? description : ""}
           onClick={() => router.push("/project/" + project.id)}
           sx={{ cursor: "pointer" }}

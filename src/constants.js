@@ -2,18 +2,18 @@ export const ACTION_ID =
   process.env.WLD_ACTION_ID || "wid_staging_3b023904babb53b039973b9341d2b5b7";
 
 export const PRE_COMMIT_MANAGER_ADDRESS = {
-  5001: "0x80F7b90C88A80eE1e60e74Ce0c6207DfcA2E182C",
+  80001: "0x80F7b90C88A80eE1e60e74Ce0c6207DfcA2E182C",
   5: "0x1550A951Eb4a59cb1a92e231951A63e7C6936057",
 };
 
 export const USDC_DUMMY = {
-  5001: "0x7D26526DedC4C3aB56B2d652AE5a75181D92bd2c",
+  80001: "0x7D26526DedC4C3aB56B2d652AE5a75181D92bd2c",
   5: "0x07865c6e87b9f70255377e024ace6630c1eaa37f",
 };
 
 export const BACKEND_LINKS = Object.freeze({
   // Mumbai
-  5001: {
+  80001: {
     theGraph:
       "https://api.thegraph.com/subgraphs/name/nhausman1/modular-microloans",
   },

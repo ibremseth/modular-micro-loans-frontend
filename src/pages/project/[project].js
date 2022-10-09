@@ -33,11 +33,11 @@ const CommitPage = () => {
   const { isConnected } = useAccount();
 
   const { config: allowanceConfig } = usePrepareContractWrite({
-    addressOrName: USDC_DUMMY[chain ? chain.id : 5001],
+    addressOrName: USDC_DUMMY[chain ? chain.id : 80001],
     contractInterface: ERC20,
     functionName: "approve",
     args: [
-      PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
+      PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 80001],
       amount ? ethers.utils.parseUnits(amount, 18) : 0,
     ],
   });
@@ -48,7 +48,7 @@ const CommitPage = () => {
   } = useContractWrite(allowanceConfig);
 
   const { config } = usePrepareContractWrite({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 80001],
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "commit",
     args: [

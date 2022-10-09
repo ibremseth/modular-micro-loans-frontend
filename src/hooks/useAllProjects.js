@@ -19,7 +19,6 @@ const GET_ALL_PROJECTS = gql`
 
 export function useAllProjects() {
   const { chain } = useNetwork();
-  console.log(chain);
 
   const { loading, data, refetch } = useQuery(GET_ALL_PROJECTS, {
     context: { chainId: chain?.id },

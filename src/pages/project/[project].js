@@ -8,7 +8,12 @@ import {
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
+import {
+  useAccount,
+  usePrepareContractWrite,
+  useContractWrite,
+  useNetwork,
+} from "wagmi";
 import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import ERC20 from "src/abis/ERC20.json";
 import { useRouter } from "next/router";
@@ -20,17 +25,19 @@ const CommitPage = () => {
   const router = useRouter();
   const { project } = router.query;
 
+  const { chain } = useNetwork();
+
   const [amount, setAmount] = useState(0);
   const [deadline, setDeadline] = useState(moment());
 
   const { isConnected } = useAccount();
 
   const { config: allowanceConfig } = usePrepareContractWrite({
-    addressOrName: USDC_DUMMY,
+    addressOrName: USDC_DUMMY[chain ? chain.id : 5001],
     contractInterface: ERC20,
     functionName: "approve",
     args: [
-      PRE_COMMIT_MANAGER_ADDRESS,
+      PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
       amount ? ethers.utils.parseUnits(amount, 18) : 0,
     ],
   });
@@ -41,7 +48,7 @@ const CommitPage = () => {
   } = useContractWrite(allowanceConfig);
 
   const { config } = usePrepareContractWrite({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "commit",
     args: [

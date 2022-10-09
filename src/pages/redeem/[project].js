@@ -1,6 +1,11 @@
 import { CircularProgress, Button, Grid } from "@mui/material";
 import { useProjectDetails } from "src/hooks/useProjectDetails";
-import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
+import {
+  useAccount,
+  usePrepareContractWrite,
+  useContractWrite,
+  useNetwork,
+} from "wagmi";
 import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
 import { PRE_COMMIT_MANAGER_ADDRESS } from "src/constants";
@@ -16,9 +21,10 @@ const RedeemPage = () => {
   const [productName, setProductName] = useState();
   const { address, isConnected } = useAccount();
   const { projectDetails } = useProjectDetails(project);
+  const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "redeem",
     args: [project, (projectDetails?.commits || []).map(({ id }) => id)],

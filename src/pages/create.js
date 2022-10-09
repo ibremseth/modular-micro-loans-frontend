@@ -1,22 +1,33 @@
-import { Autocomplete, CircularProgress, TextField, Button, Grid } from "@mui/material";
+import {
+  Autocomplete,
+  CircularProgress,
+  TextField,
+  Button,
+  Grid,
+} from "@mui/material";
 import { useState } from "react";
 import {
   useAccount,
   usePrepareContractWrite,
   useContractWrite,
   useContractEvent,
+  useNetwork,
 } from "wagmi";
 import PRE_COMMIT_MANAGER_ABI from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
-import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY, ACTION_ID, COUNTRY_LIST } from "src/constants";
+import {
+  PRE_COMMIT_MANAGER_ADDRESS,
+  USDC_DUMMY,
+  ACTION_ID,
+  COUNTRY_LIST,
+} from "src/constants";
 import { WorldIDWidget } from "@worldcoin/id";
-// import { defaultAbiCoder as abi } from "@ethersproject/abi";
 
 const CreateProject = () => {
+  const { chain } = useNetwork();
   const router = useRouter();
   const [projectName, setProjectName] = useState("");
   const [worldIDProof, setWorldIDProof] = useState(null);
-  // console.log({ worldIDProof });
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState(null);
   const [locationInput, setLocationInput] = useState("");
@@ -25,11 +36,11 @@ const CreateProject = () => {
   const [loading, setLoading] = useState(false);
 
   const { config, error } = usePrepareContractWrite({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
     contractInterface: PRE_COMMIT_MANAGER_ABI,
     functionName: "createProject",
     args: [
-      USDC_DUMMY,
+      USDC_DUMMY[chain ? chain.id : 5001],
       // worldIDProof?.merkle_root,
       // worldIDProof?.nullifier_hash,
       // !!worldIDProof ? abi.decode(["uint256[8]"], worldIDProof?.proof)[0] : [],
@@ -41,7 +52,7 @@ const CreateProject = () => {
   const { isSuccess, write } = useContractWrite(config);
 
   useContractEvent({
-    addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
+    addressOrName: PRE_COMMIT_MANAGER_ADDRESS[chain ? chain.id : 5001],
     contractInterface: PRE_COMMIT_MANAGER_ABI,
     eventName: "ProjectCreated",
     listener: (event) => {
@@ -74,7 +85,7 @@ const CreateProject = () => {
               id="accepted-asset-id"
               label="Project Name"
               placeholder="Your project here..."
-              sx={{ width: 300, paddingBottom:3}}
+              sx={{ width: 300, paddingBottom: 3 }}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
             />
@@ -82,11 +93,13 @@ const CreateProject = () => {
               disablePortal
               id="combo-box-demo"
               options={COUNTRY_LIST}
-              sx={{ width: 300, paddingBottom:3}}
-              renderInput={(params) => <TextField {...params} label="Location" />}
+              sx={{ width: 300, paddingBottom: 3 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Location" />
+              )}
               value={location}
               onChange={(event, newLocation) => {
-                console.log(newLocation)
+                console.log(newLocation);
                 setLocation(newLocation);
               }}
               inputValue={locationInput}
@@ -99,7 +112,7 @@ const CreateProject = () => {
               label="Description"
               placeholder="Share your idea with the world"
               value={description}
-              sx={{ width: 300}}
+              sx={{ width: 300 }}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Grid>

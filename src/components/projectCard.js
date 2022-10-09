@@ -27,7 +27,7 @@ const ProjectCard = ({ project }) => {
     setProjectName(projectName);
     setLocation(locationName);
     setDescription(description);
-  }
+  };
 
   useEffect(() => {
     try {
@@ -36,41 +36,47 @@ const ProjectCard = ({ project }) => {
       console.log(err);
     }
   }, [project]);
-  const locationView = location ? (<p>{"Location: " + location}</p>) : (<></>);
 
   return (
-    <Grid item sx={{ maxWidth: "25%", width: "25%" }}>
+    <Grid item sx={{ maxWidth: "33%", width: "33%" }}>
       <Card raised={true}>
         <CardHeader
           title={projectName ? projectName : "Project " + project.id}
-          subheader={project.numCommits + " active commits"}
+          //   subheader={project.numCommits + " active commits"}
+          subheader={description ? description : ""}
           onClick={() => router.push("/project/" + project.id)}
           sx={{ cursor: "pointer" }}
         />
-        <CardContent>
-          {description ? (<Typography variant="body1" color="text.secondary">
-            {description}
-          </Typography>) : (<></>)}
-          {location ? (<Typography variant="body1" color="text.secondary">
-            {location}
-          </Typography>) : (<></>)}
-          <ENSResolver address_={project.receiver} />
+        <CardContent
+          onClick={() => router.push("/project/" + project.id)}
+          sx={{ cursor: "pointer" }}
+          style={{ "margin-top": -20 }}
+        >
+          <Typography variant="h6" color="text.secondary">
+            {project.numCommits + " active commits"}
+          </Typography>
+          {location ? (
+            <div>
+              <br />
+              <Typography variant="body2" color="text.secondary">
+                {location}
+              </Typography>
+            </div>
+          ) : (
+            <></>
+          )}
         </CardContent>
         <CardActions>
-          <Fab
-            size="small"
-            color="primary"
-            aria-label="add"
-            onClick={() => router.push("/project/" + project.id)}
-          >
-            <AddIcon />
-          </Fab>
+          <div>
+            <ENSResolver address_={project.receiver} />
+          </div>
           {address &&
             project.receiver &&
             address.toLowerCase() == project.receiver.toLowerCase() && (
               <Button
                 size="small"
                 onClick={() => router.push("/redeem/" + project.id)}
+                style={{ "margin-left": "auto" }}
               >
                 Redeem
               </Button>

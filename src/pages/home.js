@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, Typography, Button, Box } from "@mui/material";
+import { useRouter } from "next/router";
 
 const styles = {
   toolBar: {
@@ -57,11 +58,15 @@ const styles = {
     paddingBottom: "30px",
     fontSize: "18px",
   },
-  title: {
+  title1: {
     paddingBottom: "15px",
+    textDecoration: "line-through"
+  },
+  title2: {
+    paddingBottom: "15px"
   },
   subtitle: {
-    opacity: "0.4",
+    opacity: ".8",
     paddingBottom: "30px",
   },
   largeImage: {
@@ -126,19 +131,23 @@ const styles = {
 };
 
 const Hero = () => {
+  const router = useRouter();
+
   return (
     <Box style={styles.heroBox}>
       <Grid container spacing={6} style={styles.gridContainer}>
         <Grid item xs={12} md={7}>
-          <Typography variant="h3" fontWeight={700} style={styles.title}>
-            Let's scale your business
+          <Typography variant="h3" fontWeight={700} style={styles.title1}>
+            Invest
+          </Typography>
+          <Typography variant="h3" fontWeight={700} style={styles.title2}>
+            Commit
           </Typography>
           <Typography variant="h6" style={styles.subtitle}>
-            Hire professionals who will help your business make 10X your previous income. With over 5years experience in
-            Marketing & Business strategy, we are your best client.
+          Commit to the projects and people that matter to you most. Commit inverts traditional fundraising by combining the power of founders and their early supporters from day 1.s
           </Typography>
-          <Button variant="contained" color="primary" sx={{ width: "200px", fontSize: "16px" }}>
-            HIRE US
+          <Button  onClick={() => router.push("/")} variant="contained" color="primary" sx={{ width: "200px", fontSize: "16px" }}>
+            Discover more
           </Button>
         </Grid>
         <Grid item xs={12} md={5}>

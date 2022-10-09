@@ -1,7 +1,27 @@
-export const ACTION_ID = process.env.WLD_ACTION_ID || "wid_staging_3b023904babb53b039973b9341d2b5b7";
-export const PRE_COMMIT_MANAGER_ADDRESS = "0x80F7b90C88A80eE1e60e74Ce0c6207DfcA2E182C";
+export const ACTION_ID =
+  process.env.WLD_ACTION_ID || "wid_staging_3b023904babb53b039973b9341d2b5b7";
+export const PRE_COMMIT_MANAGER_ADDRESS =
+  "0x80F7b90C88A80eE1e60e74Ce0c6207DfcA2E182C";
 
 export const USDC_DUMMY = "0x7D26526DedC4C3aB56B2d652AE5a75181D92bd2c";
+
+export const BACKEND_LINKS = Object.freeze({
+  // Mumbai
+  5001: {
+    theGraph:
+      "https://api.thegraph.com/subgraphs/name/nhausman1/modular-microloans",
+  },
+  // Goerli
+  5: {
+    theGraph:
+      "https://api.thegraph.com/subgraphs/name/nhausman1/goerli-modular-microloans",
+  },
+  // Optimism
+  //   5: {
+  //     theGraph:
+  //       "https://api.thegraph.com/subgraphs/name/nhausman1/goerli-modular-microloans",
+  //   },
+});
 
 export const COUNTRY_LIST = [
   { label: "Argentina 🇦🇷", id: "032" },
@@ -245,7 +265,10 @@ export const COUNTRY_LIST = [
   { label: "Uganda", id: "800" },
   { label: "Ukraine", id: "804" },
   { label: "United Arab Emirates (the)", id: "784" },
-  { label: "United Kingdom of Great Britain and Northern Ireland (the)", id: "826" },
+  {
+    label: "United Kingdom of Great Britain and Northern Ireland (the)",
+    id: "826",
+  },
   { label: "United States Minor Outlying Islands (the)", id: "581" },
   { label: "United States of America (the)", id: "840" },
   { label: "Uruguay", id: "858" },

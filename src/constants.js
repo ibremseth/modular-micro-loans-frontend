@@ -8,7 +8,7 @@ export const PRE_COMMIT_MANAGER_ADDRESS = {
 
 export const USDC_DUMMY = {
   80001: "0x7D26526DedC4C3aB56B2d652AE5a75181D92bd2c",
-  5: "0x07865c6e87b9f70255377e024ace6630c1eaa37f",
+  5: "0xd97F34f501110916c6193f1a280ADac507F9d128",
 };
 
 export const BACKEND_LINKS = Object.freeze({

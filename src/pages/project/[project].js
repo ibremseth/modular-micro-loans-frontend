@@ -27,6 +27,7 @@ const CommitPage = () => {
 
   const { chain } = useNetwork();
 
+  const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(0);
   const [deadline, setDeadline] = useState(moment());
 
@@ -57,18 +58,25 @@ const CommitPage = () => {
       deadline.unix(),
     ],
   });
-  const { isLoading, isSuccess, write } = useContractWrite(config);
+  const { isLoading, isSuccess, write, isError } = useContractWrite(config);
 
   useEffect(() => {
     if (allowanceIsSuccess && write) {
       write();
     }
-  }, [allowanceIsSuccess, write]);
+  }, [allowanceIsLoading, allowanceIsSuccess, write]);
+
+  useEffect(() => {
+    if (!isLoading && (isSuccess || isError)) {
+      setLoading(false);
+    }
+  }),
+    [isLoading, isSuccess, isError];
 
   return (
     <div>
       <br />
-      {!isLoading && !isSuccess && (
+      {!loading && !isSuccess && !isError && (
         <Grid container direction="column" spacing={2} align="center">
           <Grid item>
             <TextField
@@ -101,6 +109,7 @@ const CommitPage = () => {
             <Button
               disabled={!isConnected || !amount || !deadline || !allowanceWrite}
               onClick={() => {
+                setLoading(true);
                 allowanceWrite?.();
               }}
             >
@@ -109,17 +118,27 @@ const CommitPage = () => {
           </Grid>
         </Grid>
       )}
-      {(isLoading || allowanceIsLoading) && (
+      {loading && (
         <Grid container direction="column" align="center">
           <Grid item>
             <CircularProgress />
           </Grid>
         </Grid>
       )}
-      {isSuccess && (
+      {!loading && isSuccess && (
         <Grid container direction="column" align="center">
           <Grid item>
             <p>Success!!!</p>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => router.push("/")}>Go Home</Button>
+          </Grid>
+        </Grid>
+      )}
+      {!loading && isError && (
+        <Grid container direction="column" align="center">
+          <Grid item>
+            <p>Something went wrong :(</p>
           </Grid>
           <Grid item>
             <Button onClick={() => router.push("/")}>Go Home</Button>

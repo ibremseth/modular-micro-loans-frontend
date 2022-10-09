@@ -3,18 +3,30 @@ import { useState } from "react";
 import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
 import PRE_COMMIT_MANAGER from "src/abis/PreCommitManager.json";
 import { useRouter } from "next/router";
-import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY } from "src/constants";
+import { PRE_COMMIT_MANAGER_ADDRESS, USDC_DUMMY, ACTION_ID } from "src/constants";
+import { WorldIDWidget } from "@worldcoin/id";
+// import { defaultAbiCoder as abi } from "@ethersproject/abi";
 
 const CreateProject = () => {
   const router = useRouter();
   const [projectName, setProjectName] = useState("");
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
+  const [worldIDProof, setWorldIDProof] = useState(null);
+  // console.log({ worldIDProof });
 
-  const { config } = usePrepareContractWrite({
+  const { config, error } = usePrepareContractWrite({
     addressOrName: PRE_COMMIT_MANAGER_ADDRESS,
     contractInterface: PRE_COMMIT_MANAGER,
     functionName: "createProject",
-    args: [USDC_DUMMY],
+    args: [
+      USDC_DUMMY,
+      // worldIDProof?.merkle_root,
+      // worldIDProof?.nullifier_hash,
+      // !!worldIDProof ? abi.decode(["uint256[8]"], worldIDProof?.proof)[0] : [],
+    ],
+    // overrides: {
+    //   gasLimit: 10000000,
+    // },
   });
   const { isLoading, isSuccess, write } = useContractWrite(config);
 
@@ -33,6 +45,18 @@ const CreateProject = () => {
             />
           </Grid>
           <Grid item>
+            <div>
+              {address && (
+                <>
+                  <WorldIDWidget
+                    signal={address}
+                    actionId={ACTION_ID}
+                    onSuccess={(proof) => setWorldIDProof(proof)}
+                    debug
+                  />
+                </>
+              )}
+            </div>
             <Button
               disabled={!isConnected || !write}
               onClick={() => {
